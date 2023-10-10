@@ -21,8 +21,7 @@ class CardCount extends StatefulWidget {
 class _CardCountState extends State<CardCount> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: (MediaQuery.of(context).size.width - 25) / 2,
+    return Expanded(
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(

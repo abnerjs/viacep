@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
         toolbarHeight: 80,
+        scrolledUnderElevation: 0,
         title: Image.asset(
           'assets/images/correios.png',
           height: 32,
@@ -87,6 +88,7 @@ class _HomePageState extends State<HomePage> {
                   title: 'CEPs',
                   subtitle: 'SALVOS',
                   count: '15',
+                  route: '/cep_list_view',
                 ),
                 SizedBox(width: 8),
                 CardCount(

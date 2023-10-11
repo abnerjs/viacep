@@ -16,6 +16,7 @@ A Correios app to search and save Brazilian zip codes.
 - [ ] Delete zip code
 - [ ] View saved zip codes
 - [ ] View saved zip code on map
+- [ ] Cluster saved zip codes on map
 
 ## Screenshots
 <img src="/assets/screenshots/main.png" alt="Main Screen" width="200">

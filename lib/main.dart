@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:viacep/pages/cep_input.dart';
+import 'package:viacep/pages/cep_list_view.dart';
 import 'package:viacep/pages/home.dart';
 
 void main() {
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/home': (BuildContext context) => const HomePage(),
         '/cep_input': (BuildContext context) => const CEPInputPage(),
+        '/cep_list_view': (BuildContext context) => const CEPListViewPage(),
       },
     );
   }

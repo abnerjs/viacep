@@ -7,12 +7,14 @@ class CardCount extends StatefulWidget {
       required this.icon,
       required this.title,
       required this.subtitle,
-      required this.count});
+      required this.count,
+      this.route});
 
   final IconData icon;
   final String title;
   final String subtitle;
   final String count;
+  final String? route;
 
   @override
   State<CardCount> createState() => _CardCountState();
@@ -30,7 +32,11 @@ class _CardCountState extends State<CardCount> {
         margin: EdgeInsets.zero,
         color: Theme.of(context).colorScheme.secondary,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            if (widget.route != null) {
+              Navigator.pushNamed(context, widget.route!);
+            }
+          },
           borderRadius: BorderRadius.circular(10),
           child: Container(
             padding: const EdgeInsets.all(15),

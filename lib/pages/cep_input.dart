@@ -59,6 +59,7 @@ class _CEPInputPageState extends State<CEPInputPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
         toolbarHeight: 80,
+        scrolledUnderElevation: 0,
         title: Image.asset(
           'assets/images/correios.png',
           height: 32,
@@ -155,20 +156,25 @@ class _CEPInputPageState extends State<CEPInputPage> {
                   setState(() {
                     _isLoading = false;
                   });
+
                   viaCep = ViaCep();
                   coordinate = Coordinate(-23.55077425, -46.63386827);
-                  _mapController.move(
-                    LatLng(coordinate.lat, coordinate.lon),
-                    14,
-                  );
+                  setState(() {});
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      content: const Text(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      content: Text(
                         'CEP não encontrado!',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onError,
+                        ),
                       ),
                       showCloseIcon: true,
                     ),
+                  );
+                  _mapController.move(
+                    LatLng(coordinate.lat, coordinate.lon),
+                    14,
                   );
                 }
               },
@@ -228,6 +234,16 @@ class _CEPInputPageState extends State<CEPInputPage> {
                         child: TextButton(
                           onPressed: () {
                             Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                content: const Text(
+                                  'CEP salvo!',
+                                ),
+                                showCloseIcon: true,
+                              ),
+                            );
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(

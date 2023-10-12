@@ -1,7 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:viacep/repository/via_cep_repository.dart';
 
 class CEPListViewPage extends StatefulWidget {
   const CEPListViewPage({super.key});
@@ -11,6 +12,27 @@ class CEPListViewPage extends StatefulWidget {
 }
 
 class _CEPListViewPageState extends State<CEPListViewPage> {
+  var cepRepository = ViaCepRepository();
+  var ceps = [];
+  var _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() async {
+    setState(() {
+      _loading = true;
+    });
+    var data = await cepRepository.getAllCEP();
+    setState(() {
+      ceps = data.results;
+      _loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,58 +65,89 @@ class _CEPListViewPageState extends State<CEPListViewPage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: 16,
-        itemBuilder: (context, index) => Slidable(
-          key: ValueKey('$index'),
-          endActionPane: ActionPane(
-            dismissible: DismissiblePane(onDismissed: () {}),
-            motion: const DrawerMotion(),
-            closeThreshold: 0.5,
-            dragDismissible: false,
-            children: [
-              SlidableAction(
-                onPressed: (context) {},
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: FluentIcons.edit_12_regular,
-              ),
-              SlidableAction(
-                autoClose: false,
-                onPressed: (context) {
-                  Slidable.of(context)?.dismiss(ResizeRequest(
-                      const Duration(
-                        milliseconds: 250,
-                      ),
-                      () {}));
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('CEP removido!'),
-                      backgroundColor: Theme.of(context).colorScheme.error,
-                      action: SnackBarAction(
-                        label: 'Desfazer',
-                        textColor: Theme.of(context).colorScheme.onError,
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        },
-                      ),
+      body: _loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: ceps.length,
+              itemBuilder: (context, index) => Slidable(
+                key: ValueKey('$index'),
+                endActionPane: ActionPane(
+                  dismissible: DismissiblePane(onDismissed: () {}),
+                  motion: const DrawerMotion(),
+                  closeThreshold: 0.5,
+                  dragDismissible: false,
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {},
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      icon: FluentIcons.edit_12_regular,
                     ),
-                  );
-                },
-                backgroundColor: Theme.of(context).colorScheme.error,
-                foregroundColor: Theme.of(context).colorScheme.onError,
-                icon: FluentIcons.delete_12_regular,
+                    SlidableAction(
+                      autoClose: false,
+                      onPressed: (context) {
+                        Slidable.of(context)?.dismiss(ResizeRequest(
+                            const Duration(
+                              milliseconds: 250,
+                            ),
+                            () {}));
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('CEP removido!'),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            action: SnackBarAction(
+                              label: 'Desfazer',
+                              textColor: Theme.of(context).colorScheme.onError,
+                              onPressed: () {
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                      icon: FluentIcons.delete_12_regular,
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  title: Text(
+                    "${ceps[index].localidade} - ${ceps[index].uf}",
+                    style: GoogleFonts.robotoCondensed(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF555555),
+                    ),
+                  ),
+                  subtitle: ceps[index].logradouro != ""
+                      ? Text(
+                          "${ceps[index].logradouro} - ${ceps[index].bairro}",
+                          style: GoogleFonts.robotoCondensed(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onBackground
+                                .withOpacity(0.5),
+                          ),
+                        )
+                      : null,
+                  trailing: Text(
+                    ceps[index].cep,
+                    style: GoogleFonts.robotoCondensed(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ],
-          ),
-          child: ListTile(
-            title: Text('Rua $index'),
-            subtitle: Text('Bairro $index'),
-            trailing: Text('CEP $index'),
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

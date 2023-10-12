@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:viacep/components/card_count.dart';
 import 'package:viacep/model/coordinate.dart';
+import 'package:viacep/repository/via_cep_repository.dart';
 import 'package:viacep/utils/latlong_cep.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +19,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final MapController _mapController = MapController();
   final List<Marker> _markers = [];
+  var cepRepository = ViaCepRepository();
+  var ceps = [];
 
   @override
   void initState() {
@@ -30,7 +33,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadMap() async {
-    Coordinate coordinate = await latlongCEP('19470000');
+    var data = await cepRepository.getAllCEP();
+    setState(() {
+      ceps = data.results;
+    });
+    for (var element in ceps) {
+      _markers.add(
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: LatLng(
+            double.parse(element.lat!),
+            double.parse(element.lon!),
+          ),
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              FluentIcons.location_24_filled,
+              // ignore: use_build_context_synchronously
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      );
+    }
+
+    Coordinate coordinate = await latlongCEP(ceps[ceps.length - 1].cep!);
     setState(() {
       _mapController.move(
         LatLng(coordinate.lat, coordinate.lon),

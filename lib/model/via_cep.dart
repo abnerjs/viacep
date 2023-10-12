@@ -7,14 +7,14 @@ class ViaCepCollection {
     if (json['results'] != null) {
       results = <ViaCep>[];
       json['results'].forEach((v) {
-        results!.add(ViaCep.fromJson(v));
+        results.add(ViaCep.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['results'] = results!.map((v) => v.toJson()).toList();
+    data['results'] = results.map((v) => v.toJson()).toList();
     return data;
   }
 }
@@ -48,13 +48,13 @@ class ViaCep {
   ViaCep.fromJson(Map<String, dynamic> json) {
     objectId = json['objectId'];
     cep = json['cep'];
-    localidade = json['localidade'];
-    uf = json['uf'];
+    localidade = json['localidade'] ?? "";
+    uf = json['uf'] ?? "";
     entregas = json['entregas'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    logradouro = json['logradouro'];
-    bairro = json['bairro'];
+    logradouro = json['logradouro'] ?? "";
+    bairro = json['bairro'] ?? "";
     lat = json['lat'];
     lon = json['lon'];
   }

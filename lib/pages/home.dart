@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadMap() async {
+    _markers.clear();
+
     var data = await cepRepository.getAllCEP();
     setState(() {
       ceps = data.results;
@@ -40,14 +42,17 @@ class _HomePageState extends State<HomePage> {
     for (var element in ceps) {
       _markers.add(
         Marker(
-          width: 80.0,
-          height: 80.0,
+          width: 40.0,
+          height: 40.0,
           point: LatLng(
             double.parse(element.lat!),
             double.parse(element.lon!),
           ),
           child: IconButton(
+            iconSize: 40,
             onPressed: () {},
+            constraints: const BoxConstraints(),
+            padding: const EdgeInsets.all(8),
             icon: Icon(
               FluentIcons.location_24_filled,
               // ignore: use_build_context_synchronously
@@ -132,15 +137,34 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.only(
               left: 16,
               right: 16,
-              top: 16,
+              top: 12,
             ),
-            child: Text(
-              'ÚLTIMAS BUSCAS',
-              style: GoogleFonts.robotoCondensed(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  'ÚLTIMAS BUSCAS',
+                  style: GoogleFonts.robotoCondensed(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    _loadMap();
+                  },
+                  iconSize: 16,
+                  constraints: const BoxConstraints(),
+                  padding: const EdgeInsets.all(4),
+                  icon: Icon(
+                    FluentIcons.arrow_clockwise_12_filled,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                    opticalSize: 20,
+                  ),
+                )
+              ],
             ),
           ),
           Expanded(
@@ -149,7 +173,6 @@ class _HomePageState extends State<HomePage> {
               margin: const EdgeInsets.only(
                 left: 8,
                 right: 8,
-                top: 8,
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primaryContainer,

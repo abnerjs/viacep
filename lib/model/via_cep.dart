@@ -45,6 +45,9 @@ class ViaCep {
       this.lat,
       this.lon});
 
+  ViaCep.create(this.cep, this.localidade, this.uf, this.logradouro,
+      this.bairro, this.lat, this.lon);
+
   ViaCep.fromJson(Map<String, dynamic> json) {
     objectId = json['objectId'];
     cep = json['cep'];
@@ -68,6 +71,18 @@ class ViaCep {
     data['entregas'] = entregas;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['logradouro'] = logradouro;
+    data['bairro'] = bairro;
+    data['lat'] = lat;
+    data['lon'] = lon;
+    return data;
+  }
+
+  Map<String, dynamic> toJsonEndpoint() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['cep'] = cep;
+    data['localidade'] = localidade;
+    data['uf'] = uf;
     data['logradouro'] = logradouro;
     data['bairro'] = bairro;
     data['lat'] = lat;

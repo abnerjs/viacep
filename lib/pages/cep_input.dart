@@ -232,18 +232,44 @@ class _CEPInputPageState extends State<CEPInputPage> {
                     ? Container()
                     : Expanded(
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                content: const Text(
-                                  'CEP salvo!',
+                          onPressed: () async {
+                            try {
+                              await viaCepRepository.createCEP(
+                                ViaCep.create(
+                                  viaCep.cep,
+                                  viaCep.localidade,
+                                  viaCep.uf,
+                                  viaCep.logradouro,
+                                  viaCep.bairro,
+                                  coordinate.lat.toString(),
+                                  coordinate.lon.toString(),
                                 ),
-                                showCloseIcon: true,
-                              ),
-                            );
+                              );
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  content: const Text(
+                                    'CEP salvo!',
+                                  ),
+                                  showCloseIcon: true,
+                                ),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.error,
+                                  content: const Text(
+                                    'Erro ao salvar CEP',
+                                  ),
+                                  showCloseIcon: true,
+                                ),
+                              );
+                            } finally {
+                              Navigator.pop(context, true);
+                            }
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(

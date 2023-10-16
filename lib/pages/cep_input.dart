@@ -344,6 +344,37 @@ _buildMap(BuildContext context, ViaCep viaCep, Coordinate coordinate,
                   ),
                 ],
               ),
+              Container(
+                alignment: Alignment.topRight,
+                width: double.infinity,
+                margin: const EdgeInsets.only(
+                  top: 16,
+                ),
+                child: StreamBuilder<MapEvent>(
+                  stream: mapController.mapEventStream,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<MapEvent> snapshot) {
+                    if (mapController.camera.rotationRad != 0) {
+                      return IconButton(
+                        color: Theme.of(context).colorScheme.secondary,
+                        onPressed: () {
+                          mapController.rotate(0);
+                        },
+                        icon: Transform.rotate(
+                          angle: mapController.camera.rotationRad + 0.785398,
+                          child: Icon(
+                            FluentIcons.compass_northwest_24_filled,
+                            size: 40,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),

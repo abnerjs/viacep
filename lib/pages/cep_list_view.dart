@@ -80,35 +80,35 @@ class _CEPListViewPageState extends State<CEPListViewPage> {
                   dragDismissible: false,
                   children: [
                     SlidableAction(
-                      onPressed: (context) {},
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      icon: FluentIcons.edit_12_regular,
-                    ),
-                    SlidableAction(
                       autoClose: false,
                       onPressed: (context) {
-                        Slidable.of(context)?.dismiss(ResizeRequest(
-                            const Duration(
-                              milliseconds: 250,
-                            ),
-                            () {}));
+                        try {
+                          cepRepository.deleteCEP(ceps[index].objectId);
+                          ceps.removeAt(index);
+                          Slidable.of(context)?.dismiss(ResizeRequest(
+                              const Duration(
+                                milliseconds: 250,
+                              ),
+                              () {}));
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('CEP removido!'),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.error,
-                            action: SnackBarAction(
-                              label: 'Desfazer',
-                              textColor: Theme.of(context).colorScheme.onError,
-                              onPressed: () {
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
-                              },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('CEP removido'),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.error,
                             ),
-                          ),
-                        );
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('Erro ao remover CEP'),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.error,
+                            ),
+                          );
+
+                          debugPrint(e.toString());
+                        }
                       },
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Theme.of(context).colorScheme.onError,

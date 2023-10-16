@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
@@ -25,11 +26,20 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _initApp();
     _loadMap();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent,
     ));
+  }
+
+  void _initApp() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    await dotenv.load();
   }
 
   void _loadMap() async {
@@ -196,6 +206,38 @@ class _HomePageState extends State<HomePage> {
                     ),
                     MarkerLayer(
                       markers: _markers,
+                    ),
+                    Container(
+                      alignment: Alignment.topRight,
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                        top: 16,
+                      ),
+                      child: StreamBuilder<MapEvent>(
+                        stream: _mapController.mapEventStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<MapEvent> snapshot) {
+                          if (_mapController.camera.rotationRad != 0) {
+                            return IconButton(
+                              color: Theme.of(context).colorScheme.secondary,
+                              onPressed: () {
+                                _mapController.rotate(0);
+                              },
+                              icon: Transform.rotate(
+                                angle: _mapController.camera.rotationRad +
+                                    0.785398,
+                                child: Icon(
+                                  FluentIcons.compass_northwest_24_filled,
+                                  size: 40,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),

@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:viacep/model/via_cep.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:viacep/repository/back4app.dart';
 
 class ViaCepRepository {

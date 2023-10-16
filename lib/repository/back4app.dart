@@ -16,6 +16,7 @@ class Back4App {
               dotenv.get("X-Parse-Application-Id");
           options.headers["X-Parse-REST-API-Key"] =
               dotenv.get("X-Parse-REST-API-Key");
+          options.headers["Content-Type"] = "application/json";
 
           return handler.next(options);
         },

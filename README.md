@@ -10,13 +10,14 @@ A Correios app to search and save Brazilian zip codes.
 - Enjoy!
 
 ## Features
-- [x] View zip code on map
-- [ ] Search zip code
-- [ ] Save zip code
-- [ ] Delete zip code
-- [ ] View saved zip codes
-- [ ] View saved zip code on map
-- [ ] Cluster saved zip codes on map
+- View zip code on map
+- Search zip code
+- Save zip code
+- Delete zip code
+- View saved zip codes
+- View saved zip code on map
 
 ## Screenshots
 <img src="/assets/screenshots/main.png" alt="Main Screen" width="200">
+<img src="/assets/screenshots/map.png" alt="CEP info" width="200">
+<img src="/assets/screenshots/list.png" alt="CEP list" width="200">
